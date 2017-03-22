@@ -88,6 +88,8 @@ namespace octomap {
     /// Deep copy constructor
     OcTreeBaseImpl(const OcTreeBaseImpl<NODE,INTERFACE>& rhs);
 
+    template<typename T>
+    OcTreeBaseImpl(const OcTreeBaseImpl<T,INTERFACE>& rhs);
 
     /**
      * Swap contents of two octrees, i.e., only the underlying

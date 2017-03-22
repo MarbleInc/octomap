@@ -84,6 +84,21 @@ namespace octomap {
   }
 
   template <class NODE,class I>
+  template<typename T>
+  OcTreeBaseImpl<NODE,I>::OcTreeBaseImpl(const OcTreeBaseImpl<T,I>& rhs) :
+    root(NULL), tree_depth(rhs.tree_depth), tree_max_val(rhs.tree_max_val),
+    resolution(rhs.resolution), tree_size(rhs.tree_size)
+  {
+    init();
+
+    // copy nodes recursively:
+    if (rhs.root)
+      root = new NODE(*(rhs.root));
+
+  }
+
+
+  template <class NODE,class I>
   void OcTreeBaseImpl<NODE,I>::init(){
 
     this->setResolution(this->resolution);

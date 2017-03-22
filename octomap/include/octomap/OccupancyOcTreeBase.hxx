@@ -68,8 +68,21 @@ namespace octomap {
     this->prob_hit_log = rhs.prob_hit_log;
     this->prob_miss_log = rhs.prob_miss_log;
     this->occ_prob_thres_log = rhs.occ_prob_thres_log;
+  }
 
-
+  template <class NODE>
+  template<typename T>
+  OccupancyOcTreeBase<NODE>::OccupancyOcTreeBase(const OccupancyOcTreeBase<T>& rhs) :
+  OcTreeBaseImpl<NODE,AbstractOccupancyOcTree>(rhs), use_bbx_limit(rhs.use_bbx_limit),
+    bbx_min(rhs.bbx_min), bbx_max(rhs.bbx_max),
+    bbx_min_key(rhs.bbx_min_key), bbx_max_key(rhs.bbx_max_key),
+    use_change_detection(rhs.use_change_detection), changed_keys(rhs.changed_keys)
+  {
+    this->clamping_thres_min = rhs.clamping_thres_min;
+    this->clamping_thres_max = rhs.clamping_thres_max;
+    this->prob_hit_log = rhs.prob_hit_log;
+    this->prob_miss_log = rhs.prob_miss_log;
+    this->occ_prob_thres_log = rhs.occ_prob_thres_log;
   }
 
   template <class NODE>

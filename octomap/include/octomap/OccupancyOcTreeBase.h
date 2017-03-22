@@ -76,6 +76,9 @@ namespace octomap {
     /// Copy constructor
     OccupancyOcTreeBase(const OccupancyOcTreeBase<NODE>& rhs);
 
+    template<typename T>
+    OccupancyOcTreeBase(const OccupancyOcTreeBase<T>& rhs);
+
     /**
     * Integrate a Pointcloud (in global reference frame), parallelized with OpenMP.
     * Special care is taken that each voxel
