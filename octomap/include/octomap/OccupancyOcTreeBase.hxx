@@ -73,16 +73,18 @@ namespace octomap {
   template <class NODE>
   template<typename T>
   OccupancyOcTreeBase<NODE>::OccupancyOcTreeBase(const OccupancyOcTreeBase<T>& rhs) :
-  OcTreeBaseImpl<NODE,AbstractOccupancyOcTree>(rhs), use_bbx_limit(rhs.use_bbx_limit),
-    bbx_min(rhs.bbx_min), bbx_max(rhs.bbx_max),
-    bbx_min_key(rhs.bbx_min_key), bbx_max_key(rhs.bbx_max_key),
-    use_change_detection(rhs.use_change_detection), changed_keys(rhs.changed_keys)
+  OcTreeBaseImpl<NODE,AbstractOccupancyOcTree>(rhs), use_bbx_limit(rhs.bbxSet()),
+    bbx_min(rhs.getBBXMin()), bbx_max(rhs.getBBXMax()),
+    use_change_detection(rhs.isChangeDetectionEnabled()),
+    changed_keys(rhs.changedKeysBegin(), rhs.changedKeysEnd())
   {
-    this->clamping_thres_min = rhs.clamping_thres_min;
-    this->clamping_thres_max = rhs.clamping_thres_max;
-    this->prob_hit_log = rhs.prob_hit_log;
-    this->prob_miss_log = rhs.prob_miss_log;
-    this->occ_prob_thres_log = rhs.occ_prob_thres_log;
+    this->coordToKeyChecked(bbx_min, bbx_min_key);
+    this->coordToKeyChecked(bbx_max, bbx_max_key);
+    this->clamping_thres_min = rhs.getClampingThresMin();
+    this->clamping_thres_max = rhs.getClampingThresMax();
+    this->prob_hit_log = rhs.getProbHitLog();
+    this->prob_miss_log = rhs.getProbMissLog();
+    this->occ_prob_thres_log = rhs.getOccupancyThresLog();
   }
 
   template <class NODE>

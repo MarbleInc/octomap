@@ -86,14 +86,14 @@ namespace octomap {
   template <class NODE,class I>
   template<typename T>
   OcTreeBaseImpl<NODE,I>::OcTreeBaseImpl(const OcTreeBaseImpl<T,I>& rhs) :
-    root(NULL), tree_depth(rhs.tree_depth), tree_max_val(rhs.tree_max_val),
-    resolution(rhs.resolution), tree_size(rhs.tree_size)
+    root(NULL), tree_depth(rhs.getTreeDepth()), tree_max_val(32768),
+    resolution(rhs.getResolution()), tree_size(rhs.calcNumNodes())
   {
     init();
 
     // copy nodes recursively:
-    if (rhs.root)
-      root = new NODE(*(rhs.root));
+    if (rhs.getRoot())
+      root = new NODE(*(rhs.getRoot()));
 
   }
 
