@@ -31,16 +31,15 @@ IF(OCTOMAP_OMP)
 ENDIF(OCTOMAP_OMP)
 
 # Set output directories for libraries and executables
-SET( BASE_DIR ${CMAKE_SOURCE_DIR} )
-SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BASE_DIR}/lib )
-SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BASE_DIR}/lib )
-SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BASE_DIR}/bin )
+SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/octomap )
+SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/octomap )
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/octomap )
 # output dirs for multi-config builds (MSVC)
 foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
   STRING( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-  SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BASE_DIR}/lib )
-  SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BASE_DIR}/lib )
-  SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${BASE_DIR}/bin )
+  SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/lib/octomap )
+  SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/lib/octomap )
+  SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/bin/octomap )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 set(INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
@@ -59,6 +58,10 @@ set(INSTALL_TARGETS_DEFAULT_ARGS
 ADD_SUBDIRECTORY( src/math )
 ADD_SUBDIRECTORY( src )
 
+file(GLOB octomap_BINS ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/*)
+install(FILES ${octomap_BINS} DESTINATION bin)
+file(GLOB octomap_LIBS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*)
+install(FILES ${octomap_LIBS} DESTINATION lib)
 file(GLOB octomap_HDRS ${PROJECT_SOURCE_DIR}/include/octomap/*.h ${PROJECT_SOURCE_DIR}/include/octomap/*.hxx)
 install(FILES ${octomap_HDRS}	DESTINATION include/octomap)
 file(GLOB octomap_math_HDRS ${PROJECT_SOURCE_DIR}/include/octomap/math/*.h)
@@ -79,7 +82,7 @@ add_custom_target(uninstall
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
 export(PACKAGE octomap)
- 
+
 # Create a octomap-config.cmake file for the use from the build tree
 set(OCTOMAP_INCLUDE_DIRS "${INCLUDE_DIRS}")
 set(OCTOMAP_LIB_DIR "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
@@ -121,7 +124,7 @@ configure_file(octomap-config-version.cmake.in
   "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config-version.cmake" @ONLY)
 install(FILES
   "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config.cmake"
-  "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config-version.cmake" 
+  "${PROJECT_BINARY_DIR}/InstallFiles/octomap-config-version.cmake"
   DESTINATION share/octomap/)
 
 # Write pkgconfig-file:
@@ -132,7 +135,7 @@ install_pkg_config_file(octomap
     REQUIRES
     VERSION ${OCTOMAP_VERSION})
 
-# Documentation 
+# Documentation
 FIND_PACKAGE(Doxygen)
 IF(DOXYGEN_FOUND)
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/octomap.dox.in ${CMAKE_CURRENT_BINARY_DIR}/octomap.dox @ONLY)
